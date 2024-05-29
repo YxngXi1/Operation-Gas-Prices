@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Operation Gas Prices</title>
+</head>
+<body>
+    <h1>Operation Gas Prices</h1>
+    <ul>
+        {% for price in prices %}
+            <li>${{ price }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Average Price: ${{ average_price }}</h2>
+    <a href='/about'>
+        <button>About</button>
+    </a>
+</body>
+</html>
