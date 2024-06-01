@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Press+Start+2P&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    background-color: beige;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: 6.67vh;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-size-1 {
+    font-size: 4.1203131438vh;
+}
+
+.margin-top-100 {
+    margin-top: 11.1111111112vh;
+}
+
+.margin-top-300 {
+    margin-top: 24.3333333336vh;
+}
+
+.button-class {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 652px;
+    height: 134px;
+    font-size: 4.1203131438vh;
+    background-color: #2070EA;
+    border-radius: 14px;
+    color: white;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 400px;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.slider-display {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 100px;
+}
+
+.slider-display input {
+    border: none;
+    font-size: 100px;
+}
+
+.border {
+    border: 2px solid black;
+}
+
+.subtitles {
+    color: gray;
+    font-size: 1.5vh;
+    opacity: 0;
+    animation: fadeIn 2.5s ease-in 3s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.hy-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.mt-5 {
+    margin-top: 5vh;
+}

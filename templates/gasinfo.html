@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Operation Gas Prices</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="margin-top-100">
-        <h1 class="text-center">Who Are You?</h1>
-        <p class="text-center text-size-1">Can I get your number? Please do not put your exact address, pick an area close to you, this site is not 100% safe.</p>
+        <h1 class="text-center">Gas + Car Information?</h1>
+        <p class="text-center text-size-1">So i also need ur gas amount left (so i don’t take you somewhere too far) and your spending range for statistics (this will be important don’t worry)</p>
         <div class="container">
-            <div class="float-left">
-                aksdjkasdjk
+            <div class="float-left slider">
+                <input type="range" min="0" max="150" value="70" class="slider" id="myRange">
+                <p class="slider-display"><input type="number" id="inputField" min="0" max="150">L</p>
             </div>
             <div class="float-right">
-                <div>
-                    1
-                </div>
-                <div>
-                    under 1
-                </div>
+                spending range
             </div>
         </div>
-
+        <button class="margin-top-300 text-center button-class" onclick='window.location.href = "/calculation"'>
+            next slide
+        </button>
     </div>
+    <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
 </body>
 </html>
