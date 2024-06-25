@@ -10,22 +10,36 @@
         <h1 class="text-center">Results!</h1>
         <div>
             <div>
-                <div>
-                    chart
-                </div>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Distance (miles)</th>
+                            <th>Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for distance, location in distances_locations %}
+                            <tr>
+                                <td>{{ distance }} miles</td>
+                                <td>{{ location }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 <div>
                     click on the name for the address, and the net gain for the link to where I got my information. If you would like to see how I did my calculations click here 
                 </div>
             </div>
             <div>
                 <div>
-                    filters
+                    <button id='sortByLocation'>
+                        sort by location
+                    </button>
                 </div>
                 <div>
-                    filters
-                </div>
-                <div>
-                    filters
+                    <button id='sortByDistance'>
+                        sort by distance
+                    </button>
                 </div>
                 <div>
                     filters
@@ -43,5 +57,13 @@
         </button>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.getElementById('sortByLocation').addEventListener('click', function() {
+            window.location.href = '/results?sort=location';
+        });
+        document.getElementById('sortByDistance').addEventListener('click', function() {
+            window.location.href = '/results?sort=distance';
+        });
+    </script>
 </body>
 </html>

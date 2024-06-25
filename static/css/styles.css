@@ -69,6 +69,7 @@ h1 {
 .slider-display input {
     border: none;
     font-size: 100px;
+    width: 30vh;
 }
 
 .border {

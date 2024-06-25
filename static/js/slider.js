@@ -12,8 +12,8 @@ inputField.oninput = function() {
 }
 
 inputField.onblur = function() {
-  if (this.value > 150) {
-    this.value = 150;
+  if (this.value > 1000) {
+    this.value = 1000;
   } else if (this.value < 0) {
     this.value = 0;
   }
