@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Operation Gas Prices</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCfQtk1Yav09_EWgR8JmQCtkddXBKwuEk&libraries=places"></script>
 </head>
 <body>
     <div class="margin-top-100">
@@ -11,7 +12,8 @@
         <p class="text-center margin-top-4 text-size-1">Can I get your number? Please do not put your exact address, pick an area close to you, this site is not 100% safe.</p>
         <div class="container margin-top-4">
             <div class="float-left">
-                choose their address box :O
+                <input id="address-input" type="text" style="width: 300px;">
+                <button id="save-address" style="display:block; margin-top:10px;">Save Address</button>
             </div>
             <div class="float-right">
                 <div>
@@ -26,5 +28,24 @@
             next slide
         </button>
     </div>
+    <script>
+        function initAutocomplete() {
+            var input = document.getElementById('address-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        }
+        google.maps.event.addDomListener(window, 'load', initAutocomplete);
+        document.getElementById('save-address').addEventListener('click', function() {
+            var savedAddress = document.getElementById('address-input').value;
+            fetch('/save_address', {
+                method: 'POST',
+                body: JSON.stringify({address: savedAddress}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>

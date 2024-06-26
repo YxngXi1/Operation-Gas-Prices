@@ -13,6 +13,7 @@ def index():
 
 @app.route('/yourinfo')
 def yourinfo():
+    
     return render_template('yourinfo.html')
 
 @app.route('/gasinfo', methods=['GET', 'POST'])
