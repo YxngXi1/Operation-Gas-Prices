@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
         content.classList.toggle("show-dropdown"); // Use class to control visibility
     });
 
-    // Close the dropdown when clicking outside of it
     window.addEventListener('click', function(event) {
         if (!event.target.matches('#dropdownButton')) {
             var dropdowns = document.querySelectorAll(".dropdown-content");

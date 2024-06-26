@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 from flask import request
+import requests
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -51,6 +53,20 @@ def results():
         sorted_data = sorted(distances_costs, key=lambda x: x['cost'])
     else:
         sorted_data = distances_costs  # Default to unsorted
+        
+    user_input = 'L5M 5Y5'
+    
+    # Send a request to the target site with the user's input
+    # This example assumes you're sending the input as a query parameter
+    response = requests.get(f"https://www.gasbuddy.com/home?search={user_input}&fuel=1&method=all&maxAge=0")
+    
+    # Use BeautifulSoup to parse the HTML content
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # Scrape the data you need from the site
+    # This is a placeholder; you'll need to adjust it based on the site's structure
+    scraped_data = soup.find_all('span', class_='text__xl___2MXGo text__left___1iOw3 StationDisplayPrice-module__price___3rARL')
+    print(scraped_data)
     
     return render_template('results.html', distances_costs=sorted_data)
     
