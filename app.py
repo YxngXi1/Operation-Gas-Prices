@@ -1,9 +1,20 @@
-from flask import Flask, render_template
-from flask import request
+from flask import Flask, render_template, jsonify, request, session
 import requests
 from bs4 import BeautifulSoup
+import webbrowser
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 app = Flask(__name__)
+app.secret_key = 'iuahsdu2h98ajdisubah@9qhwduha'
 
 @app.route('/')
 def index():
@@ -13,8 +24,19 @@ def index():
 
 @app.route('/yourinfo')
 def yourinfo():
-    
     return render_template('yourinfo.html')
+    
+@app.route('/save_address', methods=['POST'])
+def save_address():
+    # Assuming the client sends data as JSON
+    data = request.get_json()
+    if not data or 'address' not in data:
+        return jsonify({'error': 'Address is missing'}), 400
+    
+    address = data['address']
+    session['address'] = address  # Save the address to the session
+    print(address)
+    return jsonify({'message': 'Address saved successfully'})
 
 @app.route('/gasinfo', methods=['GET', 'POST'])
 def gasinfo():
@@ -32,6 +54,38 @@ def calculation():
 
 @app.route('/results')
 def results():
+    def init_driver(browser_choice):
+        if browser_choice.lower() == 'firefox':
+            return webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+        elif browser_choice.lower() == 'edge':
+            return webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
+        else:
+            # Default to Chrome if no valid option is provided
+            return webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+
+    # Example usage
+    browser_choice = 'chrome'  # This could be dynamically set by the user
+    driver = init_driver(browser_choice)
+
+    user_address = session.get('address', 'Default Address')
+    url = f"https://www.gasbuddy.com/home?search={user_address}&fuel=1&method=all&maxAge=0"
+
+    driver.get(url)
+
+    # Wait for the element to be loaded
+    wait = WebDriverWait(driver, 10)
+    prices = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'StationDisplayPrice-module__price___3rARL')))
+    locations = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'StationDisplay-module__address___2_c7v')))
+
+    for price in prices:
+        print(price.text)
+        
+    for location in locations:
+        inner_html = location.get_attribute('innerHTML')
+        full_address = inner_html.replace('<br>', ' ')
+        print(location.text)
+    
+    
     sort_by = request.args.get('sort', 'default')  # Get the sort parameter from the URL, default to 'default'
     
     # Using a list of dictionaries to handle duplicate location names and additional data
@@ -55,19 +109,7 @@ def results():
     else:
         sorted_data = distances_costs  # Default to unsorted
         
-    user_input = 'L5M 5Y5'
-    
-    # Send a request to the target site with the user's input
-    # This example assumes you're sending the input as a query parameter
-    response = requests.get(f"https://www.gasbuddy.com/home?search={user_input}&fuel=1&method=all&maxAge=0")
-    
-    # Use BeautifulSoup to parse the HTML content
-    soup = BeautifulSoup(response.content, 'html.parser')
-    
-    # Scrape the data you need from the site
-    # This is a placeholder; you'll need to adjust it based on the site's structure
-    scraped_data = soup.find_all('span', class_='text__xl___2MXGo text__left___1iOw3 StationDisplayPrice-module__price___3rARL')
-    print(scraped_data)
+    driver.quit()
     
     return render_template('results.html', distances_costs=sorted_data)
     

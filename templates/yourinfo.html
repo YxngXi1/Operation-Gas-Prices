@@ -11,17 +11,9 @@
         <h1 class="text-center">Who Are You?</h1>
         <p class="text-center margin-top-4 text-size-1">Can I get your number? Please do not put your exact address, pick an area close to you, this site is not 100% safe.</p>
         <div class="container margin-top-4">
-            <div class="float-left">
+            <div class="">
                 <input id="address-input" type="text" style="width: 300px;">
                 <button id="save-address" style="display:block; margin-top:10px;">Save Address</button>
-            </div>
-            <div class="float-right">
-                <div>
-                    click to login with google
-                </div>
-                <div>
-                    click to sign up with google
-                </div>
             </div>
         </div>
         <button class="margin-top-300 text-center button-class" onclick='window.location.href = "/gasinfo"'>
@@ -34,6 +26,7 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
         }
         google.maps.event.addDomListener(window, 'load', initAutocomplete);
+
         document.getElementById('save-address').addEventListener('click', function() {
             var savedAddress = document.getElementById('address-input').value;
             fetch('/save_address', {
