@@ -240,3 +240,7 @@ table.table td:last-child {
     justify-content: center; /* Centers children vertically in the container */
     padding: 20px; /* Add some padding if needed */
 }
+
+.margin-top-4 {
+    margin-top: 4vh;
+}
