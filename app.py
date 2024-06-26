@@ -31,16 +31,28 @@ def calculation():
 def results():
     sort_by = request.args.get('sort', 'default')  # Get the sort parameter from the URL, default to 'default'
     
-    distances_locations = [(90, 'Hamilton'), (30, 'Toronto'), (40, 'Mississauga'), (20, 'Kingston'), (50, 'London'), (60, 'Niagra'), (100, 'Vancouver'), (80, 'Waterloo'), (10, 'Brampton'), (70, 'Markham')]
+    # Using a list of dictionaries to handle duplicate location names and additional data
+    distances_costs = [
+        {'location': 'Hamilton', 'distance': 90, 'cost': 3},
+        {'location': 'Toronto', 'distance': 30, 'cost': 10},
+        {'location': 'Mississauga', 'distance': 40, 'cost': 1},
+        {'location': 'Kingston', 'distance': 20, 'cost': 8},
+        {'location': 'Hamilton', 'distance': 50, 'cost': 6},
+        {'location': 'Niagra', 'distance': 60, 'cost': 9},
+        {'location': 'Vancouver', 'distance': 100, 'cost': 7},
+        {'location': 'Waterloo', 'distance': 80, 'cost': 4},
+        {'location': 'Brampton', 'distance': 10, 'cost': 5},
+        {'location': 'Hamilton', 'distance': 70, 'cost': 2}
+    ]
     
-    if sort_by == 'location':
-        sorted_data = sorted(distances_locations, key=lambda x: x[1])
-    elif sort_by == 'distance':
-        sorted_data = sorted(distances_locations, key=lambda x: x[0])
+    if sort_by == 'distance':
+        sorted_data = sorted(distances_costs, key=lambda x: x['distance'])
+    elif sort_by == 'cost':
+        sorted_data = sorted(distances_costs, key=lambda x: x['cost'])
     else:
-        sorted_data = distances_locations
+        sorted_data = distances_costs  # Default to unsorted
     
-    return render_template('results.html', distances_locations=sorted_data)
+    return render_template('results.html', distances_costs=sorted_data)
     
 
 if __name__ == '__main__':

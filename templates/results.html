@@ -6,22 +6,24 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <div class="margin-top-100">
+    <div class="margin-top-100 basic-margins fit-screen naming-sucks">
         <h1 class="text-center">Results!</h1>
-        <div>
-            <div>
-                <table border="1">
+        <div class='table-filter-container '>
+            <div class='results-div-1'>
+                <table class='table'>
                     <thead>
                         <tr>
+                            <th>Location</th>
                             <th>Distance (miles)</th>
-                            <th>Number</th>
+                            <th>Cost</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for distance, location in distances_locations %}
+                        {% for item in distances_costs %}
                             <tr>
-                                <td>{{ distance }} miles</td>
-                                <td>{{ location }}</td>
+                                <td>{{ item.location }}</td>
+                                <td>{{ item.distance }} miles</td>
+                                <td>${{ item.cost }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -30,40 +32,37 @@
                     click on the name for the address, and the net gain for the link to where I got my information. If you would like to see how I did my calculations click here 
                 </div>
             </div>
-            <div>
-                <div>
-                    <button id='sortByLocation'>
-                        sort by location
-                    </button>
-                </div>
-                <div>
-                    <button id='sortByDistance'>
-                        sort by distance
-                    </button>
-                </div>
-                <div>
-                    filters
-                </div>
-                <div>
-                    filters
+            <div class='filter-container'>
+                <div class="dropdown">
+                    <button id="dropdownButton">Sort Options</button>
+                    <div class="dropdown-content">
+                        <button id='sortByDistance'>sort by distance</button>
+                        <button id='sortByCost'>sort by cost</button>
+                        <button id='clear'>clear</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div>
-            buy me coffee
+        <div class=''>
+            <a href='https://www.paypal.com/paypalme/yangx1l?country.x=CA&locale.x=en_US' target='_blank'> 
+                buy me boba pls
+            </a>
         </div>
-        <button class="margin-top-300 text-center button-class" onclick='window.location.href = "/"'>
+        <button class="margin-top-300 text-center button-class " onclick='window.location.href = "/"'>
             driving home!
         </button>
     </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
-        document.getElementById('sortByLocation').addEventListener('click', function() {
-            window.location.href = '/results?sort=location';
-        });
         document.getElementById('sortByDistance').addEventListener('click', function() {
             window.location.href = '/results?sort=distance';
         });
+        document.getElementById('sortByCost').addEventListener('click', function() {
+            window.location.href = '/results?sort=cost';
+        });
+        document.getElementById('clear').addEventListener('click', function() {
+            window.location.href = '/results';
+        });
     </script>
+    <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
 </body>
 </html>

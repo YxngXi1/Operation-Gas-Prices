@@ -196,3 +196,4 @@ Werkzeug==3.0.1
 wheel==0.42.0
 widgetsnbextension==4.0.10
 wrapt==1.16.0
+gunicorn

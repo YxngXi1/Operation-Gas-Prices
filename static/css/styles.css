@@ -6,6 +6,21 @@
     margin: 0;
 }
 
+button {
+    padding: 10px 20px; /* Adjust padding to control the size */
+    background-color: #007BFF; /* A pleasant blue */
+    color: white; /* White text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Slightly rounded corners */
+    font-size: 1rem; /* Standard font size */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+}
+
 a {
     text-decoration: none;
 }
@@ -100,4 +115,128 @@ h1 {
 
 .mt-5 {
     margin-top: 5vh;
+}
+
+.results-div-1 {
+    width: 50%;
+}
+
+table.table {
+    border: 2px solid black;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+table.table td, table.table th {
+    padding: 3px 4px;
+    border-right: 2px solid black; /* Add right border for separation */
+}
+table.table tbody td {
+    font-size: 13px;
+}
+table.table td:nth-child(even) {
+    background: #EBEBEB;
+}
+table.table thead {
+    background: #FFFFFF;
+    border-bottom: none; /* Remove internal horizontal border */
+}
+table.table thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+    border-left: none; /* Remove internal vertical borders */
+}
+table.table td:last-child, table.table th:last-child {
+    border-right: none;
+}
+table.table tfoot {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+    border-top: none; /* Remove internal horizontal border */
+}
+table.table tfoot td {
+    font-size: 14px;
+}
+/* New rule for coloring the entire right column */
+table.table td:last-child {
+    background-color: #f0f0f0; /* Example color */
+}
+
+.basic-margins {
+    margin-left: 4vh;
+    margin-right: 4vh;
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+}
+
+.table-filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2vh;
+    height: 100%;
+    margin-top: 2vh;
+}
+
+.filter-container {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.fit-screen {
+    height: 100%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+}
+
+.show-dropdown {
+    max-height: 500px; /* Adjust as necessary */
+}
+
+.dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: 1px solid black;
+    border-bottom: none; /* Keep this to remove bottom border overlap */
+    width: 100%; /* Make button take up full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.dropdown-content button:last-child {
+    border-bottom: 1px solid black; /* Add bottom border back for the last button */
+}
+
+.dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.naming-sucks {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers children horizontally in the container */
+    justify-content: center; /* Centers children vertically in the container */
+    padding: 20px; /* Add some padding if needed */
 }
