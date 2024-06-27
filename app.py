@@ -31,15 +31,32 @@ def yourinfo():
     
 @app.route('/save_address', methods=['POST'])
 def save_address():
-    # Assuming the client sends data as JSON
     data = request.get_json()
     if not data or 'address' not in data:
         return jsonify({'error': 'Address is missing'}), 400
-    
+
     address = data['address']
-    session['address'] = address  # Save the address to the session
-    print(address)
-    return jsonify({'message': 'Address saved successfully'})
+    api_key = 'AIzaSyDCfQtk1Yav09_EWgR8JmQCtkddXBKwuEk'  # Replace with your actual API key
+    url = f"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={api_key}"
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            geodata = response.json()
+            if geodata['status'] == 'OK':
+                latitude = geodata['results'][0]['geometry']['location']['lat']
+                longitude = geodata['results'][0]['geometry']['location']['lng']
+                session['address'] = address
+                session['latitude'] = latitude
+                session['longitude'] = longitude
+                print(f'Address: {address}, Latitude: {latitude}, "Longitude: {longitude}')
+                return jsonify({'message': 'Address and coords yippeed!'})
+            else:
+                return jsonify({'error': 'No location found for the given address'}), 404
+        else:
+            return jsonify({'error': 'Failed to connect to the Geocoding service'}), response.status_code
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occurred'}), 500
 
 @app.route('/gasinfo', methods=['GET', 'POST'])
 def gasinfo():
@@ -102,10 +119,6 @@ def scrape():
         # If the location does not exist, add the new entry
         if not location_exists:
             distances_prices.append(current_data)
-
-    # At this point, distances_costs contains all your scraped data along with any existing data
-
-    # Print updated distances_costs for verification
     print(distances_prices)
         
     session['distances_prices'] = distances_prices
