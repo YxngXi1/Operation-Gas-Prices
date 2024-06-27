@@ -14,16 +14,14 @@
                     <thead>
                         <tr>
                             <th>Location</th>
-                            <th>Distance (miles)</th>
-                            <th>Cost</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in distances_costs %}
+                        {% for item in locations_prices %}
                             <tr>
                                 <td>{{ item.location }}</td>
-                                <td>{{ item.distance }} miles</td>
-                                <td>${{ item.cost }}</td>
+                                <td>{{ item.price }}/L</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -36,8 +34,8 @@
                 <div class="dropdown">
                     <button id="dropdownButton">Sort Options</button>
                     <div class="dropdown-content">
-                        <button id='sortByDistance'>sort by distance</button>
-                        <button id='sortByCost'>sort by cost</button>
+                        <button id='price_dsc'>most $$$</button>
+                        <button id='price_asc'>least $$$</button>
                         <button id='clear'>clear</button>
                     </div>
                 </div>
@@ -53,11 +51,11 @@
         </button>
     </div>
     <script>
-        document.getElementById('sortByDistance').addEventListener('click', function() {
-            window.location.href = '/results?sort=distance';
+        document.getElementById('price_dsc').addEventListener('click', function() {
+            window.location.href = '/results?sort=price_dsc';
         });
-        document.getElementById('sortByCost').addEventListener('click', function() {
-            window.location.href = '/results?sort=cost';
+        document.getElementById('price_asc').addEventListener('click', function() {
+            window.location.href = '/results?sort=price_asc';
         });
         document.getElementById('clear').addEventListener('click', function() {
             window.location.href = '/results';

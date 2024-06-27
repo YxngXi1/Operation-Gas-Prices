@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, session
 import requests
+from flask_session import Session
 from bs4 import BeautifulSoup
 import webbrowser
 from selenium import webdriver
@@ -14,7 +15,9 @@ from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 app = Flask(__name__)
-app.secret_key = 'iuahsdu2h98ajdisubah@9qhwduha'
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+app.secret_key= 'b4f+P(XRM3OESCkht?4{'
 
 @app.route('/')
 def index():
@@ -40,11 +43,6 @@ def save_address():
 
 @app.route('/gasinfo', methods=['GET', 'POST'])
 def gasinfo():
-    if request.method == 'POST':
-        # This is where you can handle the new value of the knob
-        # For example, you can store it in a database
-        new_value = request.form.get('knob_value')
-        print(new_value)  # Just for testing
     return render_template('gasinfo.html')
 
 
@@ -52,8 +50,9 @@ def gasinfo():
 def calculation():
     return render_template('calculation.html')
 
-@app.route('/results')
-def results():
+@app.route('/scrape')
+def scrape():
+    print('time to scrape')
     def init_driver(browser_choice):
         if browser_choice.lower() == 'firefox':
             return webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
@@ -76,42 +75,59 @@ def results():
     wait = WebDriverWait(driver, 10)
     prices = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'StationDisplayPrice-module__price___3rARL')))
     locations = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'StationDisplay-module__address___2_c7v')))
-
-    for price in prices:
-        print(price.text)
         
-    for location in locations:
+    distances_prices = []
+
+    # Scraping loop
+    for price, location in zip(prices, locations):
         inner_html = location.get_attribute('innerHTML')
-        full_address = inner_html.replace('<br>', ' ')
-        print(location.text)
+        full_address = inner_html.replace('<br>', ', ')
+        price_text = price.text.strip('$')  # Assuming the price is prefixed with a dollar sign
+
+        # Create a dictionary for the current location and price
+        current_data = {
+            'location': full_address,
+            'price': price_text,
+        }
+
+        # Check if the location already exists in the distances_costs list
+        location_exists = False
+        for entry in distances_prices:
+            if entry['location'] == full_address:
+                # Update this entry with new cost information or handle duplicates as needed
+                entry['cost'] = price_text
+                location_exists = True
+                break  # Assuming only one entry per location; remove if handling duplicates
+
+        # If the location does not exist, add the new entry
+        if not location_exists:
+            distances_prices.append(current_data)
+
+    # At this point, distances_costs contains all your scraped data along with any existing data
+
+    # Print updated distances_costs for verification
+    print(distances_prices)
+        
+    session['distances_prices'] = distances_prices
     
+    driver.quit()
+    
+    return jsonify({'message': 'done scraping'})
+
+@app.route('/results')
+def results():
+    distances_prices = session.get('distances_prices', [])  # Default to an empty list if not found
     
     sort_by = request.args.get('sort', 'default')  # Get the sort parameter from the URL, default to 'default'
     
-    # Using a list of dictionaries to handle duplicate location names and additional data
-    distances_costs = [
-        {'location': 'Hamilton', 'distance': 90, 'cost': 3},
-        {'location': 'Toronto', 'distance': 30, 'cost': 10},
-        {'location': 'Mississauga', 'distance': 40, 'cost': 1},
-        {'location': 'Kingston', 'distance': 20, 'cost': 8},
-        {'location': 'Hamilton', 'distance': 50, 'cost': 6},
-        {'location': 'Niagra', 'distance': 60, 'cost': 9},
-        {'location': 'Vancouver', 'distance': 100, 'cost': 7},
-        {'location': 'Waterloo', 'distance': 80, 'cost': 4},
-        {'location': 'Brampton', 'distance': 10, 'cost': 5},
-        {'location': 'Hamilton', 'distance': 70, 'cost': 2}
-    ]
-    
-    if sort_by == 'distance':
-        sorted_data = sorted(distances_costs, key=lambda x: x['distance'])
-    elif sort_by == 'cost':
-        sorted_data = sorted(distances_costs, key=lambda x: x['cost'])
+    if sort_by == 'price_asc':
+        sorted_data = sorted(distances_prices, key=lambda x: x['price'])  # Ensure price is treated as a float for sorting
+    elif sort_by == 'price_dsc':
+        sorted_data = sorted(distances_prices, key=lambda x: x['price'], reverse=True)  # Ensure price is treated as a float for sorting
     else:
-        sorted_data = distances_costs  # Default to unsorted
-        
-    driver.quit()
-    
-    return render_template('results.html', distances_costs=sorted_data)
+        sorted_data = distances_prices
+
+    return render_template('results.html', locations_prices=sorted_data)
     
 
 if __name__ == '__main__':
